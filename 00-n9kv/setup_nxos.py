@@ -27,15 +27,15 @@ __copyright__ = "Copyright (c) 2020 Cisco and/or its affiliates."
 __license__ = "Cisco Sample Code License, Version 1.1"
 
 
-# 
+#
 # Setup NX-OS switch with required configurations:
-# 
+#
 #     ! Enable iCAM
 #     feature icam
-# 
+#
 #     ! Set up hourly monitoring for two week
 #     icam monitor interval 1 num_intervals 336
-# 
+#
 #     ! Enable ACL, FIB
 #     icam monitor resource acl-tcam module 1 inst 0
 #     icam monitor resource fib-tcam module 1 inst 0
@@ -47,15 +47,15 @@ __license__ = "Cisco Sample Code License, Version 1.1"
 import requests
 import json
 import copy
-import time
+
 
 # NX-OS URL and credentials
-url='http://127.0.0.1:23456/ins'
-switchuser='admin'
-switchpassword='admin'
+url = 'http://127.0.0.1:23456/ins'
+switchuser = 'admin'
+switchpassword = 'admin'
 
 # HTTP Post headers
-myheaders={ 'content-type': 'application/json-rpc' }
+myheaders = {'content-type': 'application/json-rpc'}
 
 # Template for the paylod
 payload_template = {
@@ -66,10 +66,11 @@ payload_template = {
         'version': 1,
     },
     'id': None,
-}  
+}
+
 
 def setup_nxos():
-    payload = [] 
+    payload = []
 
     command = copy.deepcopy(payload_template)
     command['params']['cmd'] = 'feature icam'
@@ -107,12 +108,12 @@ def setup_nxos():
     payload.append(command)
 
     # Post our set of commands (one) to the NXAPI web server
-    response_raw = requests.post(url,
-                                 data=json.dumps( payload ), 
-                                 headers=myheaders,
-                                 auth=(switchuser,switchpassword)
-                                 )
+    requests.post(url,
+                  data=json.dumps(payload),
+                  headers=myheaders,
+                  auth=(switchuser, switchpassword)
+                  )
+
 
 if __name__ == '__main__':
     setup_nxos()
-
