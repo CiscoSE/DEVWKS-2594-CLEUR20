@@ -1,5 +1,6 @@
 # DEVWKS-2594-CLEUR20 specific entries
 .vagrant/
+boxes/
 
 # Editor
 .vscode/
