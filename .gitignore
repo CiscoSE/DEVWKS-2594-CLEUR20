@@ -1,6 +1,11 @@
 # DEVWKS-2594-CLEUR20 specific entries
 .vagrant/
 
+# Editor
+.vscode/
+
+# MacOS
+.DS_Store
 
 ### Standard Python .gitignore below
 
