@@ -1,0 +1,113 @@
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "body": {
+      "module": "1",
+      "instance": "0",
+      "TABLE_fib_resource": {
+        "ROW_fib_resource": [
+          {
+            "Class": "IPv4 Hosts",
+            "TABLE_fib_stats": {
+              "ROW_fib_stats": {
+                "Used_Entries": "0",
+                "Max_Entries": "0",
+                "Percent_Util": "0.00",
+                "Timestamp": "2020-01-08 23:18:34"
+              }
+            }
+          },
+          {
+            "Class": "IPv4 Routes",
+            "TABLE_fib_stats": {
+              "ROW_fib_stats": {
+                "Used_Entries": "0",
+                "Max_Entries": "0",
+                "Percent_Util": "0.00",
+                "Timestamp": "2020-01-08 23:18:34"
+              }
+            }
+          },
+          {
+            "Class": "IPv4 LPM Routes",
+            "TABLE_fib_stats": {
+              "ROW_fib_stats": {
+                "Used_Entries": "0",
+                "Max_Entries": "0",
+                "Percent_Util": "0.00",
+                "Timestamp": "2020-01-08 23:18:34"
+              }
+            }
+          },
+          {
+            "Class": "IPv6 Hosts",
+            "TABLE_fib_stats": {
+              "ROW_fib_stats": {
+                "Used_Entries": "0",
+                "Max_Entries": "0",
+                "Percent_Util": "0.00",
+                "Timestamp": "2020-01-08 23:18:34"
+              }
+            }
+          },
+          {
+            "Class": "IPv6(<=64b) Routes",
+            "TABLE_fib_stats": {
+              "ROW_fib_stats": {
+                "Used_Entries": "0",
+                "Max_Entries": "0",
+                "Percent_Util": "0.00",
+                "Timestamp": "2020-01-08 23:18:34"
+              }
+            }
+          },
+          {
+            "Class": "IPv6(>64b&<128b) Routes",
+            "TABLE_fib_stats": {
+              "ROW_fib_stats": {
+                "Used_Entries": "0",
+                "Max_Entries": "0",
+                "Percent_Util": "0.00",
+                "Timestamp": "2020-01-08 23:18:34"
+              }
+            }
+          },
+          {
+            "Class": "IPv6 LPM Routes",
+            "TABLE_fib_stats": {
+              "ROW_fib_stats": {
+                "Used_Entries": "0",
+                "Max_Entries": "0",
+                "Percent_Util": "0.00",
+                "Timestamp": "2020-01-08 23:18:34"
+              }
+            }
+          },
+          {
+            "Class": "IPv4 Multicast",
+            "TABLE_fib_stats": {
+              "ROW_fib_stats": {
+                "Used_Entries": "0",
+                "Max_Entries": "32768",
+                "Percent_Util": "0.00",
+                "Timestamp": "2020-01-08 23:18:34"
+              }
+            }
+          },
+          {
+            "Class": "IPv6 Multicast",
+            "TABLE_fib_stats": {
+              "ROW_fib_stats": {
+                "Used_Entries": "0",
+                "Max_Entries": "2048",
+                "Percent_Util": "0.00",
+                "Timestamp": "2020-01-08 23:18:34"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "id": 1
+}
