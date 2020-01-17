@@ -24,7 +24,7 @@ VirtualBox. and Docker.
 Here's a diagram illustrating the components of this module to clearly
 show how the components are interoperate:
 
-![Collection Architecture](images/02-collect-architecture.png =400px)
+![Collection Architecture](images/02-collect-architecture.png)
 
 ## Containerization Steps
 
