@@ -1,0 +1,21 @@
+---
+
+- name: Bootstrap Configuration of Sandbox NX-OS devices
+  hosts: all
+  gather_facts: false
+
+  tasks:
+
+    - name: Call NX-API Ansible Module
+      nxos_nxapi:
+        http: yes
+        https: no
+        state: present
+      when: ansible_network_os == 'nxos'
+
+    - name: Set Boot Variable
+      nxos_config:
+        lines:
+          - boot nxos bootflash:nxos.9.2.1.bin 
+        save_when: modified
+        

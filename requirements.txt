@@ -8,3 +8,4 @@ pycodestyle==2.5.0
 pyflakes==2.1.1
 requests==2.22.0
 urllib3==1.25.7
+ansible==2.9.3
