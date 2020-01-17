@@ -16,7 +16,7 @@ that will be collected by another phase.
 
 ## Network Communication Diagram
 
-<img src='images/Step01-Network-Communication.png' width='400px'>
+![Network Diagram](images/Step01-Network-Communication.png)
 
 ## How to use
 

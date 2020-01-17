@@ -12,7 +12,7 @@ Leverages the "Open NX-OS with Nexus 9Kv" DEVNET Sandbox found at
 
 ## Network Communication Diagram
 
-![Docker Containers and Sandbox Network](images/Step04-Network-Communication.png =400px)
+![Docker Containers and Sandbox Network](images/Step04-Network-Communication.png)
 
 ## Containerization Steps
 
