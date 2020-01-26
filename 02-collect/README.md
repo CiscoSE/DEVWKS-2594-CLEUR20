@@ -26,6 +26,32 @@ show how the components are interoperate:
 
 ![Collection Architecture](images/02-collect-architecture.png)
 
+## General explanation
+
+Our generation script will undergo a couple of functional changes
+in order to support operation as a container and as a prometheus
+collection target.
+
+To act as a prometheus client, we simply need to invoke the related
+Prometheus methods that:
+
+- Start the Prometheus controlled web service
+- Create the metric collection objects for our data
+- Populate those objects with our data
+
+I've added a few more metrics that can be generated as part of the
+same command as well.
+
+To help clean up the readability of the script, I've also abstract
+out all the connection details for communication with the Nexus switch
+into two files:
+
+- [payloads.py](payloads.py)
+- [connection.py](connection.py)
+
+This abstraction shows how relatively straightforward it is to clean
+up your code for easy re-use and readability.
+
 ## Containerization Steps
 
 Build the Docker image for this command:
