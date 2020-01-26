@@ -1,14 +1,38 @@
 # 03-visualize
 
-This module will focus on a couple different aspects of NX-API:
+The goal of this module is to focus on visualization of our metrics
+with Grafana, leveraging our custom generation script (now called
+**visualize.py** in this module) and Prometheus.
 
-- Custom metrics (IP route prefixes, nexthop counts)
-- Expand the script to support multiple targets for collection
+We are also going to demonstrate how the same script can be used
+on multiple switches, collected in a scalable way, and visualized
+intelligently within Grafana.
 
 ## VXLAN Fabric
 
-Leverages the "Open NX-OS with Nexus 9Kv" DEVNET Sandbox found at
-[http://devnetsandbox.cisco.com/](http://devnetsandbox.cisco.com/)
+To provide the multiple switch environment, we will leverages the
+"Open NX-OS with Nexus 9Kv On VIRL" DevNet Sandbox found at
+[http://devnetsandbox.cisco.com/](http://devnetsandbox.cisco.com/).
+
+As part of Cisco Live, a set of sandboxes has been pre-generated and
+pre-configured on your behalf in the interests of time. Connection
+information is provided for each of the workbench laptops.
+
+For those using this material as a self-study guide, the required
+setup steps are:
+
+- Reserve the above sandbox
+- Use the sandbox instructions to VPN into the sandbox
+- Follow the instructions in the [Ansible](ansible/README.md) directory
+
+To generate traffic automatically for the fabric so that you can collect
+metrics, you can run **in a separate window** the traffic.py Python script
+which will spawn 4 processes that will start ping jobs on each of the
+Nexus switches.
+
+```bash
+python traffic.py
+```
 
 ## Network Communication Diagram
 
@@ -18,86 +42,104 @@ Leverages the "Open NX-OS with Nexus 9Kv" DEVNET Sandbox found at
 
 Build the Docker image for this command:
 
-    docker build -t devwks-2594/03-visualize:latest -t devwks-2594/03-visualize:1 .
+```bash
+    docker build -t devwks-2594/visualize:latest -t devwks-2594/visualize:1 .
+```
 
 ## Operational Deployment (local laptop)
 
 Create a Docker network to which the containers will connect:
 
+```bash
     docker run --name nx-osv9000-1 -d --network demo0 -p 127.0.0.1:8891:8888 \
             -e "NXAPI_HOST=172.16.30.101" -e "NXAPI_PORT=80" \
             -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
-            devwks-2594/03-visualize
+            devwks-2594/visualize
     docker run --name nx-osv9000-2 -d --network demo0 -p 127.0.0.1:8892:8888 \
             -e "NXAPI_HOST=172.16.30.102" -e "NXAPI_PORT=80" \
             -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
-            devwks-2594/03-visualize
+            devwks-2594/visualize
     docker run --name nx-osv9000-3 -d --network demo0 -p 127.0.0.1:8893:8888 \
             -e "NXAPI_HOST=172.16.30.103" -e "NXAPI_PORT=80" \
             -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
-            devwks-2594/03-visualize
+            devwks-2594/visualize
     docker run --name nx-osv9000-4 -d --network demo0 -p 127.0.0.1:8894:8888 \
             -e "NXAPI_HOST=172.16.30.104" -e "NXAPI_PORT=80" \
             -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
-            devwks-2594/03-visualize
+            devwks-2594/visualize
+```
 
 Deploy Prometheus container:
 
+```bash
     docker run --name prometheus -d --network demo0 \
             -p 127.0.0.1:9090:9090 \
             -v ${PWD}/prometheus.yml:/etc/prometheus/prometheus.yml \
             quay.io/prometheus/prometheus
+```
 
 Deply Grafana container:
 
+```bash
     docker run --name grafana -d --network demo0 \
             -p 127.0.0.1:3000:3000 \
             grafana/grafana
+```
 
 ## If you'd like to run this on DEVBOX in the Sandbox
 
 Create the new Docker bridge network **demo0**:
 
+```bash
     docker network create --driver=bridge --subnet=192.168.254.0/24 \
                           --gateway=192.168.254.254 --attachable demo0
+```
 
 Build the Docker image for this command:
 
-    docker build -t devwks-2594/03-visualize:latest -t devwks-2594/03-visualize:1 .
+```bash
+    docker build -t devwks-2594/visualize:latest -t devwks-2594/visualize:1 .
+```
 
 Create a Docker network to which the containers will connect:
 
+```bash
     docker run --name nx-osv9000-1 -d --network demo0 -p 10.10.20.20:8891:8888 \
             -e "NXAPI_HOST=172.16.30.101" -e "NXAPI_PORT=80" \
             -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
-            devwks-2594/03-visualize
+            devwks-2594/visualize
     docker run --name nx-osv9000-2 -d --network demo0 -p 10.10.20.20:8892:8888 \
             -e "NXAPI_HOST=172.16.30.102" -e "NXAPI_PORT=80" \
             -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
-            devwks-2594/03-visualize
+            devwks-2594/visualize
     docker run --name nx-osv9000-3 -d --network demo0 -p 10.10.20.20:8893:8888 \
             -e "NXAPI_HOST=172.16.30.103" -e "NXAPI_PORT=80" \
             -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
-            devwks-2594/03-visualize
+            devwks-2594/visualize
     docker run --name nx-osv9000-4 -d --network demo0 -p 10.10.20.20:8894:8888 \
             -e "NXAPI_HOST=172.16.30.104" -e "NXAPI_PORT=80" \
             -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
-            devwks-2594/03-visualize
+            devwks-2594/visualize
+```
 
 Deploy Prometheus container:
 
+```bash
     docker run --name prometheus -d --network demo0 \
             -p 10.10.20.20:9090:9090 \
             -v ${PWD}/prometheus.yml:/etc/prometheus/prometheus.yml \
             quay.io/prometheus/prometheus
+```
 
 Deply Grafana container:
 
+```bash
     docker run --name grafana -d --network demo0 \
             -p 10.10.20.20:3000:3000 \
             grafana/grafana
+```
 
-Please note - while building the DEVNET Sandbox environment offers a lot of
+Please note - while building the DevNet Sandbox environment offers a lot of
 convenience, it may take some time before the Prometheus container actually
 shows collected data.  You can validate that Prometheus is functional and able
 to connect to the Nexus 9000v collectors by visiting the
@@ -109,7 +151,7 @@ should have a status of "UP".
 ### Examine raw data within Prometheus
 
 These examples reference building the generation, collection, and visualization
-components within the DEVNET Sandbox environment.  If you build it locally, simply
+components within the DevNet Sandbox environment.  If you build it locally, simply
 replace the IP address *10.10.20.20* with *127.0.0.1*
 
 Open a web browser and connect to the Prometheus service running in a container -
@@ -125,6 +167,10 @@ Open a web browser and connect to the Prometheus service running in a container 
 3. Plot the IP traffic for each interface
    - Click *Add Graph* to add another graph
    - Enter **ip_prefix_path_traffic** into *Expression* box and click *Execute*
+
+Shortcut, direct URL for all the relevant graphs:
+
+[Direct URL to local Prometheus](http://10.10.20.20:9090/new/graph?g0.expr=ip_prefix_path_count&g0.tab=0&g0.stacked=0&g0.range_input=1h&g1.expr=ip_prefix_path_traffic&g1.tab=0&g1.stacked=0&g1.range_input=1h&g2.expr=ip_prefix_path_uptime&g2.tab=0&g2.stacked=0&g2.range_input=1h&g3.expr=ip_prefix_path_count%7Bjob%3D%27nxapi_leaf2%27%7D&g3.tab=0&g3.stacked=0&g3.range_input=1h)
 
 ## References
 
