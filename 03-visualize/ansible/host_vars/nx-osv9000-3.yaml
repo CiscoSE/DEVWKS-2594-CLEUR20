@@ -1,0 +1,14 @@
+---
+
+router_id: 192.168.1.1
+
+# lo0 - iBGP EVPN peer, IP ASM endpoint
+# lo1 - VTEP functions
+loopbacks:
+  - { interface: loopback0, addr: 192.168.1.1/32 }
+  - { interface: loopback1, addr: 192.168.1.101/32 }
+
+# Spine links
+underlay_interfaces:
+  - { interface: Ethernet1/1, addr: 192.168.11.2/30 }
+  - { interface: Ethernet1/2, addr: 192.168.21.2/30 }

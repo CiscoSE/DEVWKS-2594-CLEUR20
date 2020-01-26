@@ -6,6 +6,7 @@ all:
     ansible_network_os: nxos
     ansible_user: cisco
     ansible_password: cisco
+    gather_facts: false
   children:
     sandbox:
       children:

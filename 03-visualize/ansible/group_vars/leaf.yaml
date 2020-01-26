@@ -1,0 +1,19 @@
+---
+
+features:
+  - bgp
+  - ospf
+  - pim
+  - "nv overlay"
+  - interface-vlan
+  - vn-segment-vlan-based
+
+address_families:
+  - { afi: l2vpn, safi: evpn }
+  - { afi: ipv4, safi: unicast }
+
+bgp_neighbors:
+  - { remote_as: 65001, neighbor: 192.168.0.1, update_source: Loopback0 }
+  - { remote_as: 65001, neighbor: 192.168.0.2, update_source: Loopback0 }
+
+rp_address: 192.168.0.100

@@ -1,0 +1,23 @@
+---
+
+features:
+  - bgp
+  - ospf
+  - "nv overlay"
+  - pim
+
+address_families:
+  - { afi: l2vpn, safi: evpn }
+
+# Use loopback1 IP address (same on all spines)
+rp_address: 192.168.0.100
+
+# Use loopback0 IP for spines
+multicast_interface:
+  - { address: 192.168.0.1 }
+  - { address: 192.168.0.2 }
+
+# loopback0 IP for leafs
+bgp_neighbors:
+  - { remote_as: 65001, neighbor: 192.168.1.1, update_source: Loopback0 }
+  - { remote_as: 65001, neighbor: 192.168.1.2, update_source: Loopback0 }

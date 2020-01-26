@@ -1,0 +1,14 @@
+---
+
+router_id: 192.168.0.1
+
+# lo0 = iBGP EVPN Route Reflector
+# lo1 = Multicast Anycast Rendezvous Point (RP)
+loopbacks:
+  - { interface: loopback0, addr: 192.168.0.1/32 }
+  - { interface: loopback1, addr: 192.168.0.100/32 }
+
+# Leaf links
+underlay_interfaces:
+  - { interface: Ethernet1/1, addr: 192.168.11.1/30 }
+  - { interface: Ethernet1/2, addr: 192.168.12.1/30 }
