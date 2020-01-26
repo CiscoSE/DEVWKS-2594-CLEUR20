@@ -6,12 +6,18 @@ all:
     ansible_network_os: nxos
     ansible_user: cisco
     ansible_password: cisco
-  hosts:
-    nx-osv9000-1:
-      ansible_host: 172.16.30.101
-    nx-osv9000-2:
-      ansible_host: 172.16.30.102
-    nx-osv9000-3:
-      ansible_host: 172.16.30.103
-    nx-osv9000-4:
-      ansible_host: 172.16.30.104
+  children:
+    sandbox:
+      children:
+        spine:
+          hosts:
+            nx-osv9000-1:
+              ansible_host: 172.16.30.101
+            nx-osv9000-2:
+              ansible_host: 172.16.30.102
+        leaf:
+          hosts:
+            nx-osv9000-3:
+              ansible_host: 172.16.30.103
+            nx-osv9000-4:
+              ansible_host: 172.16.30.104
