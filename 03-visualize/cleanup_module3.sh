@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for i in prometheus nx-osv9000-1 nx-osv9000-2 nx-osv9000-3 nx-osv9000-4; do
+for i in grafana prometheus nx-osv9000-1 nx-osv9000-2 nx-osv9000-3 nx-osv9000-4; do
     docker ps -a | grep -q ${i}
     if [ "$?" == "0" ]; then
         echo -n "Stopping "; docker stop ${i}
