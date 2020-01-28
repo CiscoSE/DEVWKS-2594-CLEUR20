@@ -24,6 +24,6 @@ source venv/bin/activate
 ## Tested Software and Appliance Versions
 
 - Nexus 9000v : The Nexus 9300v "ToR" image, version 9.3(3)
-- Python : 3.7.4 (module requirements listed in **requirements.txt**)
+- Python : 3.6.9 (module requirements listed in **requirements.txt**)
 - Ansible : 2.9.4
 - DevNet Sandbox "Open NX-OS with Nexus 9Kv on VIRL" : 9.2.1
