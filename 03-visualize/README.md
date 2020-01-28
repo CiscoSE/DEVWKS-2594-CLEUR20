@@ -51,6 +51,13 @@ Build the Docker image for this command:
 Create a Docker network to which the containers will connect:
 
 ```bash
+    docker network create --driver=bridge --subnet=192.168.254.0/24 \
+                          --gateway=192.168.254.254 --attachable demo0
+```
+
+Deploy the four collector containers:
+
+```bash
     docker run --name nx-osv9000-1 -d --network demo0 -p 127.0.0.1:8891:8888 \
             -e "NXAPI_HOST=172.16.30.101" -e "NXAPI_PORT=80" \
             -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
