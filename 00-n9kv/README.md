@@ -24,7 +24,7 @@ download **nexus9300v-9.3.3.box** from cisco.com.
 To register the image with Vagrant, the command is:
 
 ```bash
-vagrant box add nexus9300v/9.3.3 nexus9300v.9.3.3.box
+vagrant box add nxos/9.3.3 nexus9300v.9.3.3.box
 ```
 
 Once registered, from this modules directly - specifically, with the
