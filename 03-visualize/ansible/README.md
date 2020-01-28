@@ -53,5 +53,5 @@ ansible-playbook -i sandbox.yaml playbook.yaml
 
 ## Requirements
 
-- Python 3.7 : Python modules [requirements](../../requirements.txt)
+- Python 3.6 : Python modules [requirements](../../requirements.txt)
 - Ansible 2.9
