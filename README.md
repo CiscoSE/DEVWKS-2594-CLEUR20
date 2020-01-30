@@ -14,12 +14,12 @@ instructions in the respective README.md files.
 Prior to beginning the workshop for the very first time, you'll need
 to run the following setup steps (on the workshop laptops):
 
-'''bash
+```bash
 cd ${HOME}/Documents/DEVWKS-2594
 git pull
 bash setup_python.sh
 source venv/bin/activate
-'''
+```
 
 ## Tested Software and Appliance Versions
 
