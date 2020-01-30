@@ -79,33 +79,6 @@ to connect to the Nexus 9000v collectors by visiting the
 [Prometheus Target Status](http://10.10.20.70:9090/targets) page.  Each target
 should have a status of "UP".
 
-## VXLAN Fabric
-
-To provide the multiple switch environment, we will leverages the
-"Open NX-OS with Nexus 9Kv On VIRL" DevNet Sandbox found at
-[http://devnetsandbox.cisco.com/](http://devnetsandbox.cisco.com/).
-
-As part of Cisco Live, a set of sandboxes has been pre-generated and
-pre-configured on your behalf in the interests of time. Connection
-information is provided for each of the workbench laptops.
-
-For those using this material as a self-study guide, the required
-setup steps are:
-
-- Reserve the above sandbox
-- Use the sandbox instructions to VPN into the sandbox
-- Check out the code and follow the Python environment setup steps
-- Follow the instructions in the [Ansible](ansible/README.md) directory
-
-To generate traffic automatically for the fabric so that you can collect
-metrics, you can run **in a separate window** the traffic.py Python script
-which will spawn 4 processes that will start ping jobs on each of the
-Nexus switches.
-
-```bash
-python traffic.py
-```
-
 ## Demonstration Waypoints
 
 ### Examine raw data within Prometheus
@@ -132,7 +105,32 @@ Shortcut, direct URL for all the relevant graphs:
 
 [Direct URL to local Prometheus](http://10.10.20.70:9090/new/graph?g0.expr=ip_prefix_path_count&g0.tab=0&g0.stacked=0&g0.range_input=1h&g1.expr=ip_prefix_path_traffic&g1.tab=0&g1.stacked=0&g1.range_input=1h&g2.expr=ip_prefix_path_uptime&g2.tab=0&g2.stacked=0&g2.range_input=1h&g3.expr=ip_prefix_path_count%7Bjob%3D%27nxapi_leaf2%27%7D&g3.tab=0&g3.stacked=0&g3.range_input=1h)
 
+## Architecture of this module - VXLAN Fabric
 
+To provide the multiple switch environment, we will leverages the
+"Open NX-OS with Nexus 9Kv On VIRL" DevNet Sandbox found at
+[http://devnetsandbox.cisco.com/](http://devnetsandbox.cisco.com/).
+
+As part of Cisco Live, a set of sandboxes has been pre-generated and
+pre-configured on your behalf in the interests of time. Connection
+information is provided for each of the workbench laptops.
+
+For those using this material as a self-study guide, the required
+setup steps are:
+
+- Reserve the above sandbox
+- Use the sandbox instructions to VPN into the sandbox
+- Check out the code and follow the Python environment setup steps
+- Follow the instructions in the [Ansible](ansible/README.md) directory
+
+To generate traffic automatically for the fabric so that you can collect
+metrics, you can run **in a separate window** the traffic.py Python script
+which will spawn 4 processes that will start ping jobs on each of the
+Nexus switches.
+
+```bash
+python traffic.py
+```
 
 ## Network Communication Diagram
 
