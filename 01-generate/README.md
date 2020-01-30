@@ -15,10 +15,6 @@ that will be collected by another phase.
   - Must have iCAM enabled via **setup_nxos.py** script
 - [Python environment activated](../README.md)
 
-## Network Communication Diagram
-
-![Network Diagram](images/Step01-Network-Communication.png)
-
 ## How to use
 
 ```bash
@@ -26,6 +22,10 @@ python generate.py
 ```
 
 ## General explanation (for self study participants)
+
+### Network Communication Diagram
+
+![Network Diagram](images/Step01-Network-Communication.png)
 
 ### Main body of script
 
