@@ -23,6 +23,7 @@ setup steps are:
 
 - Reserve the above sandbox
 - Use the sandbox instructions to VPN into the sandbox
+- Check out the code and follow the Python environment setup steps
 - Follow the instructions in the [Ansible](ansible/README.md) directory
 
 To generate traffic automatically for the fabric so that you can collect
@@ -45,6 +46,68 @@ Build the Docker image for this command:
 ```bash
     docker build -t devwks-2594/visualize:latest -t devwks-2594/visualize:1 .
 ```
+
+## Onsite at Cisco Live - using the DevNet Sandbox
+
+Create the new Docker bridge network **demo0**:
+
+```bash
+    docker network create --driver=bridge --subnet=192.168.254.0/24 \
+                          --gateway=192.168.254.254 --attachable demo0
+```
+
+Build the Docker image for this command:
+
+```bash
+    docker build -t devwks-2594/visualize:latest -t devwks-2594/visualize:1 .
+```
+
+Fire up the 4 collectors to monitor the 4 Nexus 9000v switches - note, the IP
+address below (10.10.20.70) might be different when you reserve your own Sandbox.
+The IP is merely the address of the Developer Server in the Sandbox pod:
+
+```bash
+    docker run --name nx-osv9000-1 -d --network demo0 -p 10.10.20.70:8891:8888 \
+            -e "NXAPI_HOST=172.16.30.101" -e "NXAPI_PORT=80" \
+            -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
+            devwks-2594/visualize
+    docker run --name nx-osv9000-2 -d --network demo0 -p 10.10.20.70:8892:8888 \
+            -e "NXAPI_HOST=172.16.30.102" -e "NXAPI_PORT=80" \
+            -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
+            devwks-2594/visualize
+    docker run --name nx-osv9000-3 -d --network demo0 -p 10.10.20.70:8893:8888 \
+            -e "NXAPI_HOST=172.16.30.103" -e "NXAPI_PORT=80" \
+            -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
+            devwks-2594/visualize
+    docker run --name nx-osv9000-4 -d --network demo0 -p 10.10.20.70:8894:8888 \
+            -e "NXAPI_HOST=172.16.30.104" -e "NXAPI_PORT=80" \
+            -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
+            devwks-2594/visualize
+```
+
+Deploy Prometheus container:
+
+```bash
+    docker run --name prometheus -d --network demo0 \
+            -p 10.10.20.70:9090:9090 \
+            -v ${PWD}/prometheus.yml:/etc/prometheus/prometheus.yml \
+            quay.io/prometheus/prometheus
+```
+
+Deply Grafana container:
+
+```bash
+    docker run --name grafana -d --network demo0 \
+            -p 10.10.20.70:3000:3000 \
+            grafana/grafana
+```
+
+Please note - while building the DevNet Sandbox environment offers a lot of
+convenience, it may take some time before the Prometheus container actually
+shows collected data.  You can validate that Prometheus is functional and able
+to connect to the Nexus 9000v collectors by visiting the
+[Prometheus Target Status](http://10.10.20.70:9090/targets) page.  Each target
+should have a status of "UP".
 
 ## Operational Deployment (local laptop)
 
@@ -92,66 +155,6 @@ Deply Grafana container:
             -p 127.0.0.1:3000:3000 \
             grafana/grafana
 ```
-
-## If you'd like to run this on DEVBOX in the Sandbox
-
-Create the new Docker bridge network **demo0**:
-
-```bash
-    docker network create --driver=bridge --subnet=192.168.254.0/24 \
-                          --gateway=192.168.254.254 --attachable demo0
-```
-
-Build the Docker image for this command:
-
-```bash
-    docker build -t devwks-2594/visualize:latest -t devwks-2594/visualize:1 .
-```
-
-Create a Docker network to which the containers will connect:
-
-```bash
-    docker run --name nx-osv9000-1 -d --network demo0 -p 10.10.20.20:8891:8888 \
-            -e "NXAPI_HOST=172.16.30.101" -e "NXAPI_PORT=80" \
-            -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
-            devwks-2594/visualize
-    docker run --name nx-osv9000-2 -d --network demo0 -p 10.10.20.20:8892:8888 \
-            -e "NXAPI_HOST=172.16.30.102" -e "NXAPI_PORT=80" \
-            -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
-            devwks-2594/visualize
-    docker run --name nx-osv9000-3 -d --network demo0 -p 10.10.20.20:8893:8888 \
-            -e "NXAPI_HOST=172.16.30.103" -e "NXAPI_PORT=80" \
-            -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
-            devwks-2594/visualize
-    docker run --name nx-osv9000-4 -d --network demo0 -p 10.10.20.20:8894:8888 \
-            -e "NXAPI_HOST=172.16.30.104" -e "NXAPI_PORT=80" \
-            -e "NXAPI_USER=cisco" -e "NXAPI_PASS=cisco" \
-            devwks-2594/visualize
-```
-
-Deploy Prometheus container:
-
-```bash
-    docker run --name prometheus -d --network demo0 \
-            -p 10.10.20.20:9090:9090 \
-            -v ${PWD}/prometheus.yml:/etc/prometheus/prometheus.yml \
-            quay.io/prometheus/prometheus
-```
-
-Deply Grafana container:
-
-```bash
-    docker run --name grafana -d --network demo0 \
-            -p 10.10.20.20:3000:3000 \
-            grafana/grafana
-```
-
-Please note - while building the DevNet Sandbox environment offers a lot of
-convenience, it may take some time before the Prometheus container actually
-shows collected data.  You can validate that Prometheus is functional and able
-to connect to the Nexus 9000v collectors by visiting the
-[Prometheus Target Status](http://10.10.20.20:9090/targets) page.  Each target
-should have a status of "UP".
 
 ## Demonstration Waypoints
 
