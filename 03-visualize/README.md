@@ -8,38 +8,7 @@ We are also going to demonstrate how the same script can be used
 on multiple switches, collected in a scalable way, and visualized
 intelligently within Grafana.
 
-## VXLAN Fabric
-
-To provide the multiple switch environment, we will leverages the
-"Open NX-OS with Nexus 9Kv On VIRL" DevNet Sandbox found at
-[http://devnetsandbox.cisco.com/](http://devnetsandbox.cisco.com/).
-
-As part of Cisco Live, a set of sandboxes has been pre-generated and
-pre-configured on your behalf in the interests of time. Connection
-information is provided for each of the workbench laptops.
-
-For those using this material as a self-study guide, the required
-setup steps are:
-
-- Reserve the above sandbox
-- Use the sandbox instructions to VPN into the sandbox
-- Check out the code and follow the Python environment setup steps
-- Follow the instructions in the [Ansible](ansible/README.md) directory
-
-To generate traffic automatically for the fabric so that you can collect
-metrics, you can run **in a separate window** the traffic.py Python script
-which will spawn 4 processes that will start ping jobs on each of the
-Nexus switches.
-
-```bash
-python traffic.py
-```
-
-## Network Communication Diagram
-
-![Docker Containers and Sandbox Network](images/Step04-Network-Communication.png)
-
-## Containerization Steps
+## Build Docker container that contains your script
 
 Build the Docker image for this command:
 
@@ -47,9 +16,10 @@ Build the Docker image for this command:
     docker build -t devwks-2594/visualize:latest -t devwks-2594/visualize:1 .
 ```
 
-## Onsite at Cisco Live - using the DevNet Sandbox
+## Deploy containers in the DevNet Sandbox
 
-Create the new Docker bridge network **demo0**:
+Create the new Docker bridge network **demo0** (only if 'docker network list'
+doesn't show the network):
 
 ```bash
     docker network create --driver=bridge --subnet=192.168.254.0/24 \
@@ -109,6 +79,65 @@ to connect to the Nexus 9000v collectors by visiting the
 [Prometheus Target Status](http://10.10.20.70:9090/targets) page.  Each target
 should have a status of "UP".
 
+## VXLAN Fabric
+
+To provide the multiple switch environment, we will leverages the
+"Open NX-OS with Nexus 9Kv On VIRL" DevNet Sandbox found at
+[http://devnetsandbox.cisco.com/](http://devnetsandbox.cisco.com/).
+
+As part of Cisco Live, a set of sandboxes has been pre-generated and
+pre-configured on your behalf in the interests of time. Connection
+information is provided for each of the workbench laptops.
+
+For those using this material as a self-study guide, the required
+setup steps are:
+
+- Reserve the above sandbox
+- Use the sandbox instructions to VPN into the sandbox
+- Check out the code and follow the Python environment setup steps
+- Follow the instructions in the [Ansible](ansible/README.md) directory
+
+To generate traffic automatically for the fabric so that you can collect
+metrics, you can run **in a separate window** the traffic.py Python script
+which will spawn 4 processes that will start ping jobs on each of the
+Nexus switches.
+
+```bash
+python traffic.py
+```
+
+## Demonstration Waypoints
+
+### Examine raw data within Prometheus
+
+These examples reference building the generation, collection, and visualization
+components within the DevNet Sandbox environment.  If you build it locally, simply
+replace the IP address *10.10.20.70* with *127.0.0.1*
+
+Open a web browser and connect to the Prometheus service running in a container -
+[http://10.10.20.70:9090/](http://10.10.20.70:9090/)
+
+1. Plot the counts of paths for each IP Prefix
+   - Select **ip_prefix_path_count** from the dropdown list and click *Execute*
+
+2. Plot data solely related to **leaf2**
+   - Click *Add Graph* to add another graph
+   - Enter **ip_prefix_path_count{job="nxapi_leaf2"}** into *Expression* box and click *Execute*
+
+3. Plot the IP traffic for each interface
+   - Click *Add Graph* to add another graph
+   - Enter **ip_prefix_path_traffic** into *Expression* box and click *Execute*
+
+Shortcut, direct URL for all the relevant graphs:
+
+[Direct URL to local Prometheus](http://10.10.20.70:9090/new/graph?g0.expr=ip_prefix_path_count&g0.tab=0&g0.stacked=0&g0.range_input=1h&g1.expr=ip_prefix_path_traffic&g1.tab=0&g1.stacked=0&g1.range_input=1h&g2.expr=ip_prefix_path_uptime&g2.tab=0&g2.stacked=0&g2.range_input=1h&g3.expr=ip_prefix_path_count%7Bjob%3D%27nxapi_leaf2%27%7D&g3.tab=0&g3.stacked=0&g3.range_input=1h)
+
+
+
+## Network Communication Diagram
+
+![Docker Containers and Sandbox Network](images/Step04-Network-Communication.png)
+
 ## Operational Deployment (local laptop)
 
 Create a Docker network to which the containers will connect:
@@ -155,32 +184,6 @@ Deply Grafana container:
             -p 127.0.0.1:3000:3000 \
             grafana/grafana
 ```
-
-## Demonstration Waypoints
-
-### Examine raw data within Prometheus
-
-These examples reference building the generation, collection, and visualization
-components within the DevNet Sandbox environment.  If you build it locally, simply
-replace the IP address *10.10.20.20* with *127.0.0.1*
-
-Open a web browser and connect to the Prometheus service running in a container -
-[http://10.10.20.20:9090/](http://10.10.20.20:9090/)
-
-1. Plot the counts of paths for each IP Prefix
-   - Select **ip_prefix_path_count** from the dropdown list and click *Execute*
-
-2. Plot data solely related to **leaf2**
-   - Click *Add Graph* to add another graph
-   - Enter **ip_prefix_path_count{job="nxapi_leaf2"}** into *Expression* box and click *Execute*
-
-3. Plot the IP traffic for each interface
-   - Click *Add Graph* to add another graph
-   - Enter **ip_prefix_path_traffic** into *Expression* box and click *Execute*
-
-Shortcut, direct URL for all the relevant graphs:
-
-[Direct URL to local Prometheus](http://10.10.20.20:9090/new/graph?g0.expr=ip_prefix_path_count&g0.tab=0&g0.stacked=0&g0.range_input=1h&g1.expr=ip_prefix_path_traffic&g1.tab=0&g1.stacked=0&g1.range_input=1h&g2.expr=ip_prefix_path_uptime&g2.tab=0&g2.stacked=0&g2.range_input=1h&g3.expr=ip_prefix_path_count%7Bjob%3D%27nxapi_leaf2%27%7D&g3.tab=0&g3.stacked=0&g3.range_input=1h)
 
 ## References
 
