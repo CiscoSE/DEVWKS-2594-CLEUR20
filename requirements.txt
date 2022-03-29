@@ -10,7 +10,7 @@ idna==2.8
 Jinja2==2.10.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
-paramiko==2.7.1
+paramiko==2.10.1
 prometheus-client==0.7.1
 pycodestyle==2.5.0
 pycparser==2.19
